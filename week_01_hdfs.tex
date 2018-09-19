@@ -1,0 +1,59 @@
+\documentclass{article}
+ 
+\begin{document}
+
+Hadoop Distributed File System (HDFS) is a distributed file system designed to provide files with high bandwidth.
+In the filesystem, the files are only read or appended.
+When a file is created, it is split into multiple blocks and the copies of those blocks one the nodes are called replicas.
+Each block represents around 128MB and is replicated multiple times to provide higher bandwidth and better availability.
+
+The HDFS architecture is composed of three major actors:
+\begin{itemize}
+	\item The Client
+	\item The DataNode
+	\item The NameNode
+\end{itemize}
+
+The Client is the library installed for the user.
+It offers the view of a typical filesystem through which the user can create, delete or read, files or directories.
+It communicates with the NameNode to get block locations and it communicates with DataNodes to get the actual data.
+
+The DataNodes is a node that stores replicas.
+It send summary informations to the NameNode about the replicas it holds.
+It informs the NameNode when a replica is corrupted.
+The DataNode receives orders from the NameNode, essentially about what the DataNode should do with their replicas.
+
+The NameNode assumes the role of the file system supervisor.
+It keeps in main memory the whole namespace (a.k.a the replicas and their locations, the blocks-to-file correspondence). 
+It receives requests from the client about blocks locations and file operations.
+It decides when and where a replica should be removed or copied.
+
+The NameNode also keep track of the modifications done in the filesystem by using a journal and it creates checkpoints.
+Due to the NameNode importance, there is two variants of this node to prevent any node failure.
+Both of them are active at the same time as the NameNode.
+The CheckpointNode that downloads the current checkpoint of the NameNode and its journal in order to create a new checkpoint.
+The BackupNode which synchronizes its namespace with the NameNode's namespace.
+It can create new checkpoints without downloading the journal or the previous checkpoint, plus it can take over as a read only NameNode if the current NameNode fails.
+
+The HDFS pipeline if fairly simple.
+When a new file is create in HDFS, a new block is needed.
+The NameNode choose serie of DataNodes to host the replicas of this block and the client start uploading the data to the first DataNode.
+When the replica is full or when the file is closed, the first DataNode will copy the replica to the next DataNode in the pipeline.
+This last operation will repeat until the last DataNode of the pipeline get a replica.
+The client is notified when the pipeline is finished.
+Note that, if the client continue to upload data, a new block is created by the NameNode alongside a new pipeline.
+
+In order to get the highest bandwidth and a better fault tolerance system, HDFS follow a set of default policies.
+Some of them are listed here:
+\begin{itemize}
+\item Keep at least three replicas per block to increased bandwidth and fault tolerance.
+\item Replicas are placed on different parts of the clusters.
+\item The pipeline is design to minize bandwidth usages.
+\end{itemize}
+
+Note that those policies are configurable by the administrator.
+
+Because HDFS does not considerate the memory usage of the DataNode, it may experience imbalance.
+Such imbalance can also appears when new nodes enter the cluser.
+Therefor, HDFS provide a load balance mechanism triggered when a threshold of imbalance is crossed.
+\end{document}
