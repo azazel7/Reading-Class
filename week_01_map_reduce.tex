@@ -1,32 +1,36 @@
 \documentclass{article}
+\usepackage[margin=0.75cm]{geometry}
  
+\title{MapReduce: Simplified Data Processing on Large Clusters}
 \begin{document}
-The paper present a programming model called \textit{MapReduce}.
+\maketitle
+
+The paper presents a programming model called \textit{MapReduce}.
 The main idea is to structure algorithms with two functions:
 \begin{itemize}
-	\item $Map (k1, v1) list(k2,v2)$
-	\item $Reduce (k2, list(v2)) list(v2)$
+	\item $Map (key1, value1) \rightarrow list(key2,value2)$
+	\item $Reduce (key2, list(value2)) \rightarrow list(value2)$
 \end{itemize}
 
-The \textit{Map} function maps a pair of $(key,value)$ to a new pair $(key2, value2)$.
-Note that the ensemble of $key2$ is smaller than initial ensemble.
+The \textit{Map} function maps a pair of $(key1,value1)$ to a new pair $(key2, value2)$.
+Note that the ensemble of intermediate keys ($key2$) is smaller than the initial ensemble.
 
 Then the \textit{Reduce} function will take a pair of $(key2, list(value2))$ as input and merge $list(value2)$ into a smaller list.
 Note that a pair $(key2, list(value2))$ describe all $value2$ associated with a $key2$.
 
 The strength of this programming model rely on two factors.
-A lot of problems can be express with those two functions (\textit{Map} and \textit{Reduce}) and an algorithm express in this model is easy to parallelize and distribute.
+A lot of problems can be expressed with those two functions (\textit{Map} and \textit{Reduce}) and an algorithm expressed in this model is easy to parallelize and distribute.
 
 The implementation of the \textit{MapReduce} programming model proposed in the paper has four actors:
 \begin{itemize}
-	\item The user programm that provide at least the two functions \textit{Map} and \textit{Reduce}.
-	\item The master which communicate with the user programm and organize the work.
+	\item The user program that provides at least the two functions \textit{Map} and \textit{Reduce}.
+	\item The master which communicate with the user program and organize the work.
 	\item The \textit{map workers} that execute the \textit{Map} function.
-	\item The \textit{reduce workers} that execute the \textit{Reduce} function. The number of \textit{reduce workers} is inderectly defined by the user.
+	\item The \textit{reduce workers} that execute the \textit{Reduce} function. The number of \textit{reduce workers} is indirectly defined by the user.
 \end{itemize}
 
-The algorithm can be expressed as follow.
-There is M \textit{map workers} and R \textit{reduce workers}.
+The algorithm to execute a \textit{MapReduce} on a cluster can be expressed as follow.
+There are M \textit{map workers} and R \textit{reduce workers}.
 
 The data are split into M pieces distributed among \textit{map workers}.
 The \textit{map workers} execute the \textit{Map} function and produce R output files on their local disk.
@@ -37,27 +41,27 @@ The \textit{reduce workers} take those output files as input and sort the interm
 Then they execute the \textit{Reduce} function on the intermediate keys and produce R output files (one per \textit{reduce worker}).
 
 Note that the output files are distributed amongst \textit{reduce workers} and are rarely melt into one file.
-Instead, the user programm usually give those ouput files as input to another distributed algorithm.
+Instead, the user program usually gives those ouput files as input to another distributed algorithm.
 
-The master is responsible of organizing all workers.
-It also check for node failure, in which case it start new workers to complete the task.
+The master is responsible for organizing all workers.
+It also checks for node failure, in which case it starts new workers to complete the task.
 Experimental results show that the implementation can handle hundreds of node failures and still complete within a reasonable amount of time (usually 10 more minutes).
 
 To avoid a task (\textit{Map} or \textit{Reduce}) to take forever to complete (due to node failure, slower machine, switch issues, ...), the master creates a backup task when the \textit{MapReduce} is almost completed.
 The idea is to put many workers on the same task so the task is more likely to complete in time.
-This may looks like wasted ressources, but experimental results show that it helps shorten computation at the end of the algorithm.
+This may look like wasted resources, but experimental results show that it helps shorten computation at the end of the algorithm.
 
 The paper provide details to make life easier when implementing the \textit{MapReduce} model:
 \begin{itemize}
 	\item Allow the user to provide a hash function for intermediate keys (instead of the default one).
-	\item Guarante key order processing.
-	\item Allow user to provide a combiner function that do a partial merging on \textit{map workers}.
+	\item Guarantee key order processing.
+	\item Allow the user to provide a combiner function that does a partial merging on \textit{map workers}.
 	\item Support different types of input and output (integer, double, ...).
-	\item Provide a way to skip errors on few inputs to avoid interupting the MapReduce for one or two lines.
+	\item Provide a way to skip errors on few inputs to avoid interrupting the MapReduce for one or two lines.
 	\item Provide a sequential execution on a local machine for debugging purpose.
 	\item Show status information to the user like percentage of completed tasks.
 	\item Provide counter to the user, to count various events.
 \end{itemize}
 
-To conclude, the \textit{MapReduce} allow to simplify many distributed codes by transfering to a third party common issues (node failure, parallelization).
+To conclude, the \textit{MapReduce} allows to simplify many distributed codes by transferring to a third party common issues (node failure, parallelization, communication between workers).
 \end{document}
