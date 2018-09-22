@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage[margin=0.75cm]{geometry}
+\usepackage{listings}
+ 
+\title{Apache Spark: a unified engine for big data processing}
+\begin{document}
+\maketitle
+
+Spark is a framework that aims at unifying all previous models (\textit{MapReduce}, \textit{SQL}, graph libraries).
+It leverages this unification to optimize the two bottleneck in big data: the bandwidth and the I/O.
+
+Spark heavily relies on Resilient Distributed Dataset (RDD) to organize the data.
+As RDD is supposed to emulate any distributed system, Spark can reproduce previous programming models.
+Because RDD gives control over both bandwidth and disk access, Spark can implement the same optimization used
+in specialized libraries.
+
+Spark also relies on state-of-the-art libraries to perform optimized computation on workers.
+
+The programming model offered by Spark is composed of two types of operation:
+\begin{itemize}
+	\item lazy operations (like \textit{filters}, \textit{maps} or \textit{group by}).
+	\item actions operation.
+\end{itemize}
+
+As long as the user only call lazy operations, Spark will simply chain those operations and return to the user.
+However, when an action is called, Spark will start evaluating all the previous operations.
+In other words, Spark waits until the user is done describing the pipeline to execute it.
+
+Because the high-level libraries run on top of Spark, Spark can optimized pipelines across libraries,
+while older framework had to write data on local disk to give them to the next library.
+Thus, Spark can run part of the pipeline in main memory, saving a lot of I/O.
+
+Contrary to other systems, Spark does not use replication to recover from node failure. Instead, it keeps track of the
+transformation graph and re-runs the computation when data are lost.
+It is called lineage-based recovery and it has shown better performance than replication.
+
+Note that in case of a \textit{Shuffle}, the sender keeps a copy of the data in case of receiver failure.
+
+To conclude, Spark is used everywhere. In companies (Netflix, Samsung, Alibaba) as well as in research facilities (Berkley, MIT).
+Spark include many libraries, the most used being \textit{Spark SQL} (to manipulate dataframe and to execute SQL queries), \textit{Spark Streaming} (to process stream),
+\textit{GraphX} (to manage graphs) and \textit{MLlib} (a machine learning library).
+The most used parts of Spark are the core part and \textit{Spark SQL} part.
+Spark is mainly used for \textit{batch processing}, but also for \textit{interactive programming}, \textit{Stream processing}, and research.
+\end{document}
