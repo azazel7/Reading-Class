@@ -1,0 +1,93 @@
+\documentclass{article}
+\usepackage[margin=0.75cm]{geometry}
+\usepackage{listings}
+\usepackage{float}
+ 
+\title{Dask: Parallel computation wit blocked algorithms and task scheduling}
+\begin{document}
+\maketitle
+
+Dask provides a framework to describe a program as a direct acyclic graph (DAG) of tasks.
+Each node of the graph is a task and each input edges is a dependency.
+Therefore, each task needs to complete their dependency before being executed.
+Then this DAG is given to a runtime that handles the whole execution.
+
+The graph is represented by a python dictionary where keys are mapped to either values or tasks.
+\textit{A task is a tuple with a callable first element}.
+\textit{A key can be any hashable element that is not a task}\footnote{Those sentences are word for word what is writen in the paper, but it was so clear I had to use it.}.
+
+Figure~\ref{fig:simple-python} shows a very simple algorithm and Figure~\ref{fig:simple-python-encode} shows how it can be stored in the dictionary.
+\begin{figure}[H] 
+	\begin{lstlisting}[language=python]
+	def inc(i):
+		return i + 1
+	def add(a, b):
+		return a + b
+	x = 1
+	y = inc(x)
+	z = add(y, 10)
+	\end{lstlisting}
+	\caption{A simple python code}
+	\label{fig:simple-python}
+\end{figure} 
+\begin{figure}[H] 
+	\begin{lstlisting}[language=python]
+	d = {'x': 1,
+	'y': (inc, 'x'),
+	'z': (add, 'y', 10)}
+	\end{lstlisting}
+	\caption{The dictionary of the previous simple python code.}
+	\label{fig:simple-python-encode}
+\end{figure} 
+
+The main element to build this DAG is the direct use of \textit{Dask Arrays}.
+Instead of creating a classic NumPy\footnote{NumPy is python package for scientific computing.} array, the user will create a \textit{Dask Arrays}.
+Then, he will manipulate the array exactly like any NumPy array (adding values, summing the array, etc).
+All the manipulations done to the arrays will add up to the DAG.
+The last thing to do is to call the function \textit{compute} on \textit{Dask Array}.
+
+Figure~\ref{fig:example-dask} shows an example of how to use \textit{Dask Arrays}.
+We can see that a \textit{Dask Array} is used exactly like a usual array, but instead
+of doing the actual computation, Dask will only build the DAG.
+\begin{figure}[h] 
+	\center
+	\begin{lstlisting}[language=python]
+	import dask.array as da
+	x = da.arange(15)
+	y = (x + 100)
+	z = y.sum()
+	z.compute()
+	\end{lstlisting}
+	\caption{An example of \textit{Dask arrays}. \textit{z} is initialized with \textit{x}, it is then stored as a
+	\textit{Dask array}. Note that \textit{z} does not have a real value before the call to \textit{compute}, where all computation is scheduled and executed.}
+	\label{fig:example-dask}
+\end{figure} 
+
+Dask also relies on blocked algorithms which are algorithms working with chunks of data rather than individual data.
+Let us say, we would like to sum an array, we could add each element of the array to the next.
+But, we could also split the array into four sub-array, compute the sum for each of them then sum the four sub-sum.
+The second example is a blocked algorithm because it works with chunks of the original data.
+Blocked algorithms help creating more parallelism because you can often execute the sub-computation in parallel.
+
+Dask provides a parameter to split a \textit{Dask Array} into chunks when it is created.
+Then, when creating the DAG, Dask will create one task for each chunk and one task to combine the results from them.
+
+To execute the DAG, Dask uses dynamic schedulers.
+Every time a task is completed, its state is updated and its output dependencies are updated as well.
+Therefore, new tasks may become ready.
+
+After several tries, it was found that a policy of \textit{last-in first-out} was more effective than others.
+The reason exposed in the paper is because it releases intermediate results fast enough so there is no need to write them on the disk.
+
+If no scheduler suits the need of the user, it is possible to implement a new scheduler.
+
+Dask also provides two other parallel collections.
+The first one is a \textit{bag}, which is a list without any guarantee on the order.
+Dask bag follows the \textit{PyToolz} API.
+The second collection is a dataframe that is close to \textit{Panda}.
+
+To conclude, I would say that, like Spark, Dask put itself in between the user and the computation.
+Thanks to that, it builds a graph of task dependency also known as DAG and this DAG is executed by a scheduler.
+That makes Dask a tool easy to use even for scientific with a minimal background in programming.
+\end{document}
+
