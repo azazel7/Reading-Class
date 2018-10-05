@@ -1,0 +1,74 @@
+\documentclass{article}
+\usepackage[margin=0.75cm]{geometry}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{algorithm2e}
+\usepackage{pgfgantt}
+\usepackage{hyperref}
+
+ 
+\title{Big Data Project}
+\author{Martin Khannouz}
+\begin{document}
+\maketitle
+
+\section*{Abstract}
+a few sentences summarizing the document.
+This document is a brief abstract about a Big Data project.
+\section{Introduction}
+context
+	The internet of things and sensor network are developping.
+	Mining data streams directly on the chip may provide two benefits:
+	increasing computing capacity;
+	increasing battery efficiency by cutting useless data.
+	
+objectives
+	What we want to do in this project is to provide a library with data stream algorithms.
+
+presentation of the problem to solve
+
+\section{Related work}
+ %https://github.com/jiecchen/StreamingCC
+	StreamingCC: A C++ library for summarizing data (data streams, in particular).
+	Heavy use of vectors
+Existing bloom filter library:
+- http://www.partow.net/programming/bloomfilter/index.html
+	Prety well documented and can do basic operations with bloom filter.
+- https://github.com/Baqend/Orestes-Bloomfilter
+	More complexe, but with more features (it appears to me) and performance metrics for the hashes.
+- http://matthias.vallentin.net/blog/2011/06/a-garden-variety-of-bloom-filters/
+	Less documented, but include a wide variety of Bloom Filter (including Spectral Bloom Filter).
+	Make the use of vectors.
+- https://github.com/jvirkki/libbloom
+	Simple bloom filter in plain C.
+- https://github.com/brianmadden/rust-bloom-filter
+	Library in rust :).
+
+
+Existing Flajolet-Martin:
+- https://github.com/svengato/FlajoletMartin
+	Require boost and FarmHash (a google code for hashing)
+
+Frequency moments not found.
+Existing Reservoir Sampling:
+- https://www.geeksforgeeks.org/reservoir-sampling/
+	Some code for integers
+- https://en.cppreference.com/w/cpp/algorithm/sample
+	May implement reservoir sampling.
+- https://www.codeproject.com/Articles/1192528/Reservoir-Sampling-of-Data-Streams
+	C code
+- http://erikerlandson.github.io/blog/2015/11/20/very-fast-reservoir-sampling/
+	Fast algorithms writen in scala according to the keywords.
+- https://datasketches.github.io/docs/Sampling/ReservoirSamplingPerformance.html
+	Basic reservoir sampling with performance test. In Java though.
+
+Existing library:
+- https://github.com/jiecchen/StreamingCC
+	A C++ library for summarizing data (data streams, in particular).
+	Heavy use of vectors
+- https://github.com/manuzhang/awesome-streaming
+	Summurize of streaming lib. Not always adapted to embeded.
+\section{Materials and Methods}
+the dataset(s)
+technologies and algorithms that will be used.
+\end{document}
