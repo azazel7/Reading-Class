@@ -11,8 +11,10 @@
 \maketitle
 
 \section*{Abstract}
-%a few sentences summarizing the document.
-This document is a brief abstract about a Big Data project.
+Given the increasing number of streaming devices, it may be interesting to offload computation onto those devices.
+This Big Data project aims at providing a library with various data stream algorithms and data structures.
+Then, this paper will evaluate those algorithms by looking at their performance and their memory footprint.
+
 \section{Introduction}
 The idea of an Internet of Things (IoT) has been growing during the past few years.
 IoT can be seen as large objects (i.e watch, fridge or cars) connected to internet as
@@ -90,10 +92,11 @@ overview of existing projects that provide algorithms to mine data stream.
 
 \section{Materials and Methods}
 Given that the library is destined for microcontroller and sensors we will limit ourselve to datasets
-with simple datatype: temperature; humidity; acceleration.
+with simple datatype: temperature; humidity; or acceleration.
 The library will be developped so it can compile and execute in a FreeRTOS project.
-The algorithm that will be implemented will be two filtering algorithms and two sampling methods:
-
+To test the library in a FreeRTOS environment, the project will rely on
+\href{https://www.freertos.org/FreeRTOS-simulator-for-Linux.html}{FreeRTOS/Posix}.
+Algorithms that will be implemented in the library will be two filtering algorithms and two sampling methods:
 \begin{itemize}
 	\item Bloom Filter
 	\item Cuckoo Filter
@@ -101,4 +104,8 @@ The algorithm that will be implemented will be two filtering algorithms and two 
 	\item Chained Reservoir Sampling.
 \end{itemize}
 
+\section{Results}
+Does it works? Evaluate performances of each algorithm for the basic operation?
+\section{Discussion}
+a discussion of the relevance of the solution(s), of the limitations and of possible future work.
 \end{document}
