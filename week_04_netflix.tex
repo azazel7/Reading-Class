@@ -1,0 +1,83 @@
+\documentclass{article}
+\usepackage[margin=0.75cm]{geometry}
+\usepackage{listings}
+\usepackage{float}
+ 
+\title{Matrix Factorization Techniques for Recommender Systems}
+\begin{document}
+\maketitle
+The recommender systems presented in the paper is
+based on a matrix factorization where rows and
+column are products and users. Values in cells are
+the rating gave by user $u$ for product $i$.
+The idea is to find the user's preferences in
+order to recommand a product suit for him.
+
+Formally, each item $i$ (product or movie) is
+associated with a vector $q_{i} \in R^{f}$.
+$q_{i}$ is a vector of factors about the item
+(author, type of movie, length, ...).
+Each user is associated with a vector $p_{u} \in
+R^{f}$. $p_{u}$ indicate the interest of the user
+$u$ about each factor in $q_{i}$.
+The between given by a user $u$ for a product $i$
+is $r_{ui} = q_{i}^{T} p_{u}$. We call $r_{ui}$
+the prediction for the the real rating $r_{ui}$.
+A hard part in the recommender system is to gather
+the value for $p_{u}$ and $q_{i}$ for all user and
+all product because most of $p_{u}$ are not
+available. Thus, the recommender system will learn
+them. To do so, the algorithm will try to minimize
+the regularized squared error.
+
+There is two learning algorithms proposed in this
+paper. The stochastic gradient descent will first
+predict the rating $r_{ui}$ then compute the
+error to adjust the values of both $p_{u}$ and $q_{i}$.
+The second algorithm (Alternating Least Square) is
+iterative and has the interesting feature of
+being suit for massive parallelization.
+
+To correctly recommand products, the recommender algorithm
+has to face many issue. The biais issue is when a
+product or a user is systematically over or under
+rated. For example, when rating a movie, some user
+give always good marks will other give always bad
+marks. The same is true for a movie which will
+receive better score because of an advertasing
+campaigne. To counter those biais we introduce
+$b_{ui} = \mu + b_{u} + b_{i}$. $\mu$ is the
+overall average rating; $b_{u}$ and $b_{i}$ are
+the observed deviation from the average. The
+rating predicted become $r_{ui} = b_{ui} + q_{i}^{T} p_{u}$.
+Another issue faced by the system is when there is
+very few data about users. To compensate for that
+lack of information, we can gather other
+data about the user regardless of its
+willingness~: zip code; age; gender; browsing
+history; mouse movement.
+User's preference ($p_{u}$ and $b_{u}$) and
+product popularity ($b_{i}$) may change over
+time. To adress this issue, $p_{u}$, $b_{u}$, and
+$b_{i}$ are considered as function of the time
+$t$ ($p_{u}(t)$, $b_{u}(t)$, and $b_{i}(t)$).
+A last issue faced by the recommender system is
+the influence on rating due to event outside the
+range of the product. Those event could be a massive
+advertasing about a movie or a user that
+systematically over-rate one type of product
+without viewing the content. To bypass this
+problem, the system introduce a level of
+confidence when a user rate a product. This level
+of confidence is computed certain information like
+\textit{how long did the user watch a show}
+or \textit{how frequently does the user by a
+product}. Then the level of confidence is use 
+when computing the regularized square error to
+weight the error given this level.
+This type of recommender system has won the Netflix
+prize competition in 2007 and 2008. 
+
+\end{document}
+
+%vim: tw=50 ts=2:

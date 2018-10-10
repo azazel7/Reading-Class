@@ -1,0 +1,111 @@
+\documentclass{article}
+\usepackage[margin=0.75cm]{geometry}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+ 
+\title{Big Data Project}
+\author{Martin Khannouz}
+\begin{document}
+\maketitle
+
+\section*{Abstract}
+Given the increasing number of streaming devices, it may be interesting to offload computation onto those devices.
+This Big Data project aims at providing a library with various data stream algorithms and data structures.
+Then, this paper will evaluate those algorithms by looking at their performance and their memory footprint.
+
+\section{Introduction}
+The idea of an Internet of Things (IoT) has been growing during the past few years.
+IoT can be seen as large objects (i.e watch, fridge or cars) connected to internet as
+well as smaller sensors forming networks.
+In the second case, it is wise to make the chip embeded as much energy efficient as
+possible. It is known that the most energy consuming part of a communicating device
+is the network. The less the device communicates, the longer its batery will last.
+
+Hence, it may be interesting to leverage the computational capacity of a device
+so it can mine its own data streams. Even though this capacity is small, a simple
+chip can still execute basic operations like filtering, compression or sampling.
+Then the device can decide which part of the data stream to send through the
+network.
+
+The objective of this project is to build a data stream library adapted to embeded
+environment. This library will focus at providing simple data stream algorithm
+for microcontroller with a FreeRTOS operating system.
+
+\section{Related work}
+Many libraries on data stream mining already exist. Some specialize on one
+algorithm (i.e. the Bloom Filter, a reservoir sampling) and some others implement
+a wider variety of data stream algorithm and data structure. In this section, we will have a brief
+overview of existing projects that provide algorithms to mine data stream.
+
+\paragraph{StreamingCC}
+	\href{https://github.com/jiecchen/StreamingCC}{StreamingCC} is a C++ library for summarizing data streams.
+	It provides several data stream algorithms such as Count-Min Sketch;
+	Count-Sketch; Distinct Elements Counter; Reservoir sampling; Bloom Filter and its variants.
+	However, StreamingCC makes a heavy use of standard library containers such as vectors.
+	This use of the standard library makes it difficult to export with embedded systems like
+	FreeRTOS because features provided by the kernel are not on the microcontroller.
+
+\paragraph{Awesome Streaming}
+	\href{https://github.com/manuzhang/awesome-streaming}{Awesome Streaming} is a GitHub repository that lists many streaming resources:
+	framework; applications, or reading material.
+	Not all resources target embedded software. Some are streaming engine relying on Spark and some other are frameworks for gathering
+	data from sensor networks.
+
+\paragraph{Bloom Filter}
+	Many libraries implement the Bloom Filter data structure.
+	This \href{http://www.partow.net/programming/bloomfilter/index.html}{library} is a
+	well-documented C++ Bloom Filter Library that is implemented in a single header
+	and does not rely on any dependencies.
+	The \href{https://github.com/Baqend/Orestes-Bloomfilter}{Orestes-Bloomfilter}
+	is a java library that implements four Bloom Filter variants.
+	Two of them support concurrent access to the structure.
+	\href{http://matthias.vallentin.net/blog/2011/06/a-garden-variety-of-bloom-filters/}{library of Bloom Filter (libbf)}
+	provides a wide variety of Bloom Filter based algorithms. It includes the Spectral Bloom Filter; the Stable Bloom Filter; the $A^2$ Bloom Filter; and
+	the bitwise Bloom Filter.
+	The library \href{https://github.com/jvirkki/libbloom}{libbloom} provides an implementation in plain C for the basic Bloom Filter.
+	Finally, \href{https://github.com/brianmadden/rust-bloom-filter}{rust-bloom-filter} is a Rust implementation of the Bloom Filter
+	and it includes MurmurHash3.
+
+\paragraph{Cuckoo Filter}
+	The Cuckoo filter is a Bloom Filter alternative. Given the parameters and the environment,
+	it may achieve better performance than the Bloom Filter.
+	Here is a non-exhaustive list of GitHub repositories that implement a Cuckoo Filter many languages: \href{https://github.com/vijayee/cuckoo-filter}{javascript};
+	\href{https://github.com/seiflotfy/rust-cuckoofilter}{Rust};
+	\href{https://github.com/seiflotfy/cuckoofilter}{Go};
+	and \href{https://github.com/begeekmyfriend/CuckooFilter}{C}. 
+
+\paragraph{Flajolet-Martin}
+	The Flajolet-Martin algorithm aims at counting distinct element in a stream.
+	This \href{https://github.com/svengato/FlajoletMartin}{repository} provides
+	an implementation of this algorithm that uses boost and
+	FarmHash\footnote{\href{https://github.com/google/farmhash}{FarmHash} is an open-source library that implements hash functions.}
+
+\paragraph{Reservoir Sampling}
+	Reservoir Sampling is a group of algorithms that sample a stream.
+	The standard algorithm replaces an element in the sample with the new element with a certain probability.
+	Variants exist with weight elements. 
+	\href{https://www.geeksforgeeks.org/reservoir-sampling/}{Here} is a brief code that applies a reservoir sampling algorithm to integers.
+	The \href{https://en.cppreference.com/w/cpp/algorithm/sample}{standard C++ library} provides may use reservoir sampling in the sample algorithm.
+	\href{http://erikerlandson.github.io/blog/2015/11/20/very-fast-reservoir-sampling/}{Here} is a scala code that implements a reservoir sampling method.
+
+\section{Materials and Methods}
+Given that the library is destined for microcontroller and sensors we will limit ourselve to datasets
+with simple datatype: temperature; humidity; or acceleration.
+The library will be developped so it can compile and execute in a FreeRTOS project.
+To test the library in a FreeRTOS environment, the project will rely on
+\href{https://www.freertos.org/FreeRTOS-simulator-for-Linux.html}{FreeRTOS/Posix}.
+Algorithms that will be implemented in the library will be two filtering algorithms and two sampling methods:
+\begin{itemize}
+	\item Bloom Filter
+	\item Cuckoo Filter
+	\item Basic Reservoir Sampling.
+	\item Chained Reservoir Sampling.
+\end{itemize}
+
+\section{Results}
+Does it works? Evaluate performances of each algorithm for the basic operation?
+\section{Discussion}
+a discussion of the relevance of the solution(s), of the limitations and of possible future work.
+\end{document}
