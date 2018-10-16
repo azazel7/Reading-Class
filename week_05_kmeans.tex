@@ -3,44 +3,44 @@
 \usepackage{listings}
 \usepackage{float}
 
-\newcommand{\kmean}{\textit{k-mean}} 
-\newcommand{\kmeanpp}{\textit{k-mean++}} 
-\newcommand{\km}{\textit{k-mean$\vert\vert$}} 
-\newcommand{\partition}{\textit{Partition}} 
+\newcommand{\kmean}{\textit{k-mean}~} 
+\newcommand{\kmeanpp}{\textit{k-mean++}~} 
+\newcommand{\km}{\textit{k-mean$\vert\vert$}~} 
+\newcommand{\partition}{\textit{Partition}~} 
 
 \title{Scalable K-Means++}
 \begin{document}
 \maketitle
 \kmean is a clustering problem where we want to find $k$ points
 that minimize the distance to a cloud of points. This a NP-hard problem
-that can be approximate with an algorithm called Lloyd’s iteration.
+that can be approximated with an algorithm called Lloyd’s iteration.
 The idea behind Lloyd’s iteration is to start with $k$ random points then to
-improve them iteratively. Instead of starting with completely random points, \kmeanpp
-propose an algorithm to choose them more carrefully, however this initialisation
-algorithm suffer some limitation. It is sequential and it has to do multiple passes over
-the data. Also, it does not guarentee that running Lloyd’s iteration after \kmeanpp initialisation
+iterate to improve them. Instead of starting with completely random points, \kmeanpp
+propose an algorithm to choose them more carefully, however, this initialization
+pass suffers some limitations. It is sequential and it has to do multiple passes over
+the data. Also, it does not guarantee that running Lloyd’s iteration after \kmeanpp initialization
 will automatically improve the result.
 
-The paper propose a new algorithm called \km based on \kmeanpp to solve those limitations.
-\km samples approximately $l \times \log \psi$ points in the whole data. Where $l$ is a user defined
+The paper proposes a new algorithm called \km based on \kmeanpp to solve those limitations.
+\km samples approximately $l \times \log \psi$ points in the whole data. Where $l$ is a user-defined
 parameter close to $\Theta (k)$ and $\psi$ is the result of a cost function. Let us call the sample $C$.
 Then all sampled points in $C$ receive a weight based on how many points are closer to them in the original
 data. Finally, \km calls a clustering algorithm to cluster the weighted points in $C$. The result of this
 clustering is then used as the starting state for the Lloyd's iterations.
-The call to the clustering algorithm should fast because it only run over $C$ instead of the whole data.
-The paper also propose a brief intuition to implement \km using the MapReduce programming model.
+The call to the clustering algorithm should fast because it only runs over $C$ instead of the whole data.
+The paper also proposes a brief intuition to implement \km using the MapReduce programming model.
 
 To experiment they algorithm, they use three datasets and compare their code against three other code:
-\kmeanpp; the basic random initialisation; and \partition, a recent streaming algorithm. \partition is based
+\kmeanpp; the basic random initialization; and \partition, a recent streaming algorithm. \partition is based
 upon \kmeanpp and thus, works similar to \km. It \textit{oversamples} the whole data then give a weight to
-each element. Finally, it recluster the weighted sample to get $k$ starting points for Lloyd's iteration.
+each element. Finally, it reclusters the weighted sample to get $k$ starting points for Lloyd's iteration.
 The results presented in the paper shows that \km manage to get lower cost than the three other algorithms.
-It is also shown that when running en parallel, \km algorithm outperforms all other methods, especially \partition.
+It is also shown that when running in parallel, \km algorithm outperforms all other methods, especially \partition.
 \km reach this performance because it selects less intermediate points in its sample, therefore, the reclustering step is
 faster for \km. In addition to being faster, \km also fasten the convergence of Lloyd's iterations.
 
 To conclude, the paper presents a new method, \km, to initialize the $k$ centers of Lloyd's iterations.
-This method is compared to other algorithm in used such as \partition, \kmeanpp or the native random initialisation.
+This method is compared to other algorithms in used such as \partition, \kmeanpp or the native random initialization.
 The experiment shows that \km produce better quality centers for the Lloyd's iterations and it can be executed in parallel
 with lower running time than its counterparts.
 
