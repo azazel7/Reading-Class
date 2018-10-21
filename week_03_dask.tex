@@ -2,6 +2,10 @@
 \usepackage[margin=0.75cm]{geometry}
 \usepackage{listings}
 \usepackage{float}
+\usepackage{color}
+\newcommand{\writing}[1]{\uwave{#1}}  
+\newcommand{\tristan}[1]{\color{red}TG: #1}
+
  
 \title{Dask: Parallel computation wit blocked algorithms and task scheduling}
 \begin{document}
@@ -14,9 +18,11 @@ Then this DAG is given to a runtime that handles the whole execution.
 
 The graph is represented by a python dictionary where keys are mapped to either values or tasks.
 \textit{A task is a tuple with a callable first element}.
-\textit{A key can be any hashable element that is not a task}\footnote{Those sentences are word for word what is writen in the paper, but it was so clear I had to use it.}.
+\textit{A key can be any hashable element that is not a task}\footnote{Those sentences are word for word what is writen in the paper, but it was so clear I had to use it. \tristan{It's fine but then use quotes or the quote Latex environment. And write something like
+``as written by the authors: '\ldots'" }}.
 
-Figure~\ref{fig:simple-python} shows a very simple algorithm and Figure~\ref{fig:simple-python-encode} shows how it can be stored in the dictionary.
+Figure~\ref{fig:simple-python} shows a very simple algorithm and Figure~\ref{fig:simple-python-encode} shows how it can be stored in the dictionary \tristan{I understand why it's here, but an abstract shouldn't include code excerpts. 
+Instead, it should summarize the paper with sentences.}.
 \begin{figure}[H] 
 	\begin{lstlisting}[language=python]
 	def inc(i):
@@ -89,5 +95,9 @@ The second collection is a dataframe that is close to \textit{Panda}.
 To conclude, I would say that, like Spark, Dask put itself in between the user and the computation.
 Thanks to that, it builds a graph of task dependency also known as DAG and this DAG is executed by a scheduler.
 That makes Dask a tool easy to use even for scientific with a minimal background in programming.
+
+\tristan{Your abstract correctly covers the paper and is at the right level of detail.
+But it reads a bit like a bullet list: you should aim at getting a more compact, written flow.
+This will help you when you write your literature review.}
 \end{document}
 
