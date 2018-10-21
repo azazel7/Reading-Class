@@ -5,23 +5,31 @@
 \usepackage{hyperref}
 
  
+\newcommand{\note}[1]{\marginpar{\parbox{18mm}{\flushleft\tiny\color{red}\textbf{TODO}:
+      #1}}} 
+      
 \title{Big Data Project}
 \author{Martin Khannouz}
 \begin{document}
 \maketitle
 
 \section*{Abstract}
-Given the increasing number of streaming devices, it may be interesting to offload computation onto those devices.
-This Big Data project aims at providing a library with various data stream algorithms and data structures.
-Then, this paper will evaluate those algorithms by looking at their performance and their memory footprint.
+Given the increasing number of streaming devices \note{This is not the 
+only motivation, you should also list: data privacy, energy saving 
+(reduced network transmissions).}, it may be interesting to offload 
+computation onto those devices. This Big Data project aims at providing 
+a library with various data stream algorithms and data structures \note{The library
+targets connected objects, embedded systems, IoT, etc}. 
+Then, this paper will evaluate those algorithms by looking at their 
+performance and their memory footprint.
 
 \section{Introduction}
 The idea of an Internet of Things (IoT) has been growing during the past few years.
 IoT can be seen as large objects (i.e watch, fridge or cars) connected to internet as
 well as smaller sensors forming networks.
-In the second case, it is wise to make the chip embeded as much energy efficient as
+In the second case, it is wise to make the chip embedded as much energy efficient as
 possible. It is known that the most energy consuming part of a communicating device
-is the network. The less the device communicates, the longer its batery will last.
+is the network. The less the device communicates, the longer its battery will last. \note{Great intro, could be backed by references}
 
 Hence, it may be interesting to leverage the computational capacity of a device
 so it can mine its own data streams. Even though this capacity is small, a simple
@@ -29,9 +37,9 @@ chip can still execute basic operations like filtering, compression or sampling.
 Then the device can decide which part of the data stream to send through the
 network.
 
-The objective of this project is to build a data stream library adapted to embeded
+The objective of this project is to build a data stream library adapted to embedded
 environment. This library will focus at providing simple data stream algorithm
-for microcontroller with a FreeRTOS operating system.
+for micro-controller with a FreeRTOS operating system. \note{Explain FreeRTOS}
 
 \section{Related work}
 Many libraries on data stream mining already exist. Some specialize on one
@@ -45,7 +53,7 @@ overview of existing projects that provide algorithms to mine data stream.
 	Count-Sketch; Distinct Elements Counter; Reservoir sampling; Bloom Filter and its variants.
 	However, StreamingCC makes a heavy use of standard library containers such as vectors.
 	This use of the standard library makes it difficult to export with embedded systems like
-	FreeRTOS because features provided by the kernel are not on the microcontroller.
+	FreeRTOS because features provided by the kernel \tood{Linux kernel?} are not on the microcontroller.
 
 \paragraph{Awesome Streaming}
 	\href{https://github.com/manuzhang/awesome-streaming}{Awesome Streaming} is a GitHub repository that lists many streaming resources:
@@ -88,12 +96,14 @@ overview of existing projects that provide algorithms to mine data stream.
 	Variants exist with weight elements. 
 	\href{https://www.geeksforgeeks.org/reservoir-sampling/}{Here} is a brief code that applies a reservoir sampling algorithm to integers.
 	The \href{https://en.cppreference.com/w/cpp/algorithm/sample}{standard C++ library} provides may use reservoir sampling in the sample algorithm.
-	\href{http://erikerlandson.github.io/blog/2015/11/20/very-fast-reservoir-sampling/}{Here} is a scala code that implements a reservoir sampling method.
+	\href{http://erikerlandson.github.io/blog/2015/11/20/very-fast-reservoir-sampling/}{Here} is a Scala code that implements a reservoir sampling method.
+    
+    \note{Nice review! It would be nice to summarize it in a Table.}
 
 \section{Materials and Methods}
-Given that the library is destined for microcontroller and sensors we will limit ourselve to datasets
-with simple datatype: temperature; humidity; or acceleration.
-The library will be developped so it can compile and execute in a FreeRTOS project.
+Given that the library is destined for microcontrollers and sensors we will limit ourselves to datasets
+with simple datatype: temperature; humidity; or acceleration. \note{Acceleration is 3D, will you consider that?}
+The library will be developed so it can compile and execute in a FreeRTOS project.
 To test the library in a FreeRTOS environment, the project will rely on
 \href{https://www.freertos.org/FreeRTOS-simulator-for-Linux.html}{FreeRTOS/Posix}.
 Algorithms that will be implemented in the library will be two filtering algorithms and two sampling methods:
@@ -103,9 +113,10 @@ Algorithms that will be implemented in the library will be two filtering algorit
 	\item Basic Reservoir Sampling.
 	\item Chained Reservoir Sampling.
 \end{itemize}
+\note{Language used? Datasets used for testing and validation? What will you measure?}
 
 \section{Results}
-Does it works? Evaluate performances of each algorithm for the basic operation?
+Does it work? Evaluate performances of each algorithm for the basic operation?
 \section{Discussion}
-a discussion of the relevance of the solution(s), of the limitations and of possible future work.
+A discussion of the relevance of the solution(s), of the limitations and of possible future work.
 \end{document}
