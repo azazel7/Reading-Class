@@ -7,31 +7,57 @@
 \title{Mining Frequent Patterns without Candidate Generation}
 \begin{document}
 \maketitle
-The paper propose a data scructure to address the Frequent Patterns problem.
+The paper proposes a data structure to address the Frequent Patterns problem.
 This problem can be explained as follow.
 Let $I = \{a_0, a_1, \cdots, a_m\}$ be a set of items and $DB = \{T_0, T_1, \cdots, T_n\}$ a transaction database where each $T_i$ is composed of items in $I$.
-A frequent pattern is a sub-set of items $A_k = \{b_1, \cdots, b_p\}$ that occures at least $\lambda$ in $BD$ where $\lambda$ is user defined threshold.
+A frequent pattern is a subset of items $A_k = \{b_1, \cdots, b_p\}$ that occurs at least $\lambda$ in $BD$ where $\lambda$ is a user-defined threshold.
 Then mining frequent patterns is finding all frequent patterns in $DB$.
-To solve this problem, the paper propose a compact data structure based on a tree that only need to read the database twice.
+To solve this problem, the paper describes a compact data structure based on a tree (\textit{FP-tree})that only need to read the database twice.
 
-The tree is built in two steps.
-The first steps read through all the transaction to count frequent items and keep a list of those that occurs more than $\lambda$.
-The second step build the tree while reading the database a second time.
-Each node in that tree contains an item and a counter.
-The root is initialized with a null item.
-Then, each transaction $T_i$ will be read from the database and trimmed of the less frequent items.
+The \textit{FP-tree} is composed of one empty root which is the parent of the other nodes and a frequency table.
+Each node contains one \textit{item}; a \textit{counter} that indicates the number of time this node has been added on this branch;
+and a \textit{link} that points toward the next node that contains \textit{item}.
+The frequency table references all frequent items in the database.
+Each entry of this table are indexed by one frequent item and contains the head of a linked list of all nodes containing that item.
+The \textit{FP-tree} is built in two steps.
+The first step read through all transactions to count frequent items and keep a list of those that occur more than $\lambda$.
+The second step builds the tree while reading the database a second time.
+Each transaction $T_i$ will be read from the database and trimmed of the less frequent items.
 The remaining items will be sorted in a list $T_i'$ according to their frequency in the database.
-This sorted list can be defined by $T_i' = [b_0, \cdots, b_p]$, where each $b_k \in T_i$ and the frequency of each $b_k$
-is more than the threshold $\lambda$.
+This sorted list can be defined by $T_i' = [b_0, \cdots, b_p]$, where each $b_k$ follow those criteria:
+\begin{itemize}
+	\item $b_k \in T_i$.
+	\item $b_k$ has a frequency above $\lambda$ in the database.
+	\item Frequency of $b_k$ is greater or equal to the frequency of $b_{k+1}$.
+\end{itemize}
 Then elements of $T_i'$ are inserted in the tree so each node containing the item $b_k$ is the parent of the node containing $b_{k+1}$.
-The parent of $b_0$ is the root.
+The parent of $b_0$ is always the root of the tree.
 If a node containing $b_k$ already exists in the branch and at the level it should be inserted, then the counter of this node is incremented by one. 
 At the end of the second step, all branches where nodes have a counter higher than $\lambda$ define a set of frequent patterns.
-The whole set of frequent patterns associated to one branch are all combinations of nodes from that branch.
+The whole set of frequent patterns associated with one branch are all combinations of nodes from that branch.
+The paper demonstrates that the tree contains all relevant information about the frequent patterns of the database.
+It also shows that the size of the tree is bound by the overall occurrence of the frequent items in $DB$ while the
+tree's height is bound by the maximal number of frequent items in one transaction.
+To efficiently retrieve the frequent patterns containing an item $a_k$, we use the frequency table to collect all the tree nodes that contain $a_k$.
+Then we can compute the prefix path of each of those nodes.
+This gives us the conditional pattern base of the item $a_k$ which is a set of paths that prefix each appearance of $a_k$ in the tree.
 
+The paper compares the \textit{FP-growth} method with the \textit{Apriori} algorithm and the \textit{TreeProjection} which was a new efficient algorithm at the time.
+They used two data-sets to make the comparison, $D_1$ and $D_2$, with $D_2$ being ten times larger than $D_1$.
+Figures in the experimental section show that \textit{FP-growth} outperforms the old \textit{Apriori} algorithm when the threshold $\lambda$ become too small.
+They also show that \textit{FP-growth} better handles a large amount of transaction than \textit{Apriori}.
+When it comes to \textit{TreeProjection}, the paper shows that \textit{FP-growth} has better performance with smaller $\lambda$.
+This difference comes from the fact that \textit{FP-growth} merges more efficiently frequent patterns.
+According to the positive experimental results, the paper discusses scalability issue and performance bottleneck the \textit{FP-tree} could be encountered.
+When a database is so large the corresponding \textit{FP-tree} cannot fit in main memory, the paper explains two methods to handle it.
+One aims at splitting the database between multiple computers so the separated \textit{FP-tree} can fit in memory.
+The second proposes an alternative structure to efficiently build the tree on disk.
+Another way of dealing with large trees is to decrease the threshold while the algorithm is still working.
+The way the tree structure is organized allows the user to decrease $\lambda$ by simply drop the lower part of the tree. 
 
-
-
+To conclude, the paper describes a new approach to mine frequent patterns in a transaction database.
+This approach relies on a compact data structure and it manages to outperform state-of-the-art algorithm.
+The paper also proposes different ways of dealing with scalability issues that appear when the database gets too big. 
 \end{document}
 
 %vim: tw=50 ts=2:
