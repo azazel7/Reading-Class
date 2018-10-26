@@ -7,12 +7,16 @@
 \title{Mining Frequent Patterns without Candidate Generation}
 \begin{document}
 \maketitle
-The paper proposes a data structure to address the Frequent Patterns problem.
-This problem can be explained as follow.
-Let $I = \{a_0, a_1, \cdots, a_m\}$ be a set of items and $DB = \{T_0, T_1, \cdots, T_n\}$ a transaction database where each $T_i$ is composed of items in $I$.
-A frequent pattern is a subset of items $A_k = \{b_1, \cdots, b_p\}$ that occurs at least $\lambda$ in $BD$ where $\lambda$ is a user-defined threshold.
-Then mining frequent patterns is finding all frequent patterns in $DB$.
-To solve this problem, the paper describes a compact data structure based on a tree (\textit{FP-tree})that only need to read the database twice.
+The paper proposes a data structure to address the problem of mining 
+Frequent Patterns. This problem can be explained as follows. Let $I = 
+\{a_0, a_1, \cdots, a_m\}$ be a set of items and $DB = \{T_0, T_1, 
+\cdots, T_n\}$ a transaction database where each $T_i$ is composed of 
+items in $I$. A frequent pattern is a subset of items $A_k = \{b_1, 
+\cdots, b_p\}$ that occurs at least $\lambda$ in $BD$ where $\lambda$ 
+is a user-defined threshold. Then mining frequent patterns is finding 
+all frequent patterns in $DB$. To solve this problem, the paper 
+describes a compact data structure based on a tree 
+(\textit{FP-tree}) that only needs to read the database twice.
 
 The \textit{FP-tree} is composed of one empty root which is the parent of the other nodes and a frequency table.
 Each node contains one \textit{item}; a \textit{counter} that indicates the number of time this node has been added on this branch;
