@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage[margin=0.75cm]{geometry}
+\usepackage{listings}
+\usepackage{float}
+
+
+\title{Space/Time Trade-offs in Hash Coding with Allowable Errors}
+\begin{document}
+\maketitle
+The membership problem is when an object or message must be identified as a member of a set previously created.
+Previous methods used to store allowed messages and to test the received messages against the one already stored.
+However, the set of messages stored may not fit in the main memory.
+The paper discusses a new approach that requires less space to deal with this problem.
+The gain in space is made by allowing a small fraction of error.
+
+The paper talk about one conventional hashing methods and two hashing method with allowable errors.
+The conventional method will first hash the message then store this message in an array
+at the cell indexed by the hash.
+Testing a new message for membership is like hashing the message and check if the message is stored
+in the cell corresponding to its hash.
+The first hashing method with allowable error (Method 1) is similar to the conventional method except
+that instead of storing the message, it will store a fingerprint of this message. 
+The adjustable error comes from the size of the fingerprint.
+The smaller it is, the more error there will be.
+The second method with allowable error (Method 2) works similarly to Method~1, but instead of storing
+a fingerprint, it only stores one bit: 0 for an empty cell and 1 otherwise.
+Thus the strength of the of Method~2 relies on the distribution of the hashing function.
+To increase this strength, the paper proposes to use a hash function that returns multiple hash values.
+Then those values are used to address many 1-bit cells in the array\footnote{We note that using one hash function
+that return multiple values can also be seen as combining multiple hash function that return one value.}.
+Those two methods with allowable errors should be used in a very specific case.
+The conventional method should not fit in memory and a certain rate of false positive should be acceptable.
+The false positive can be verified later by accessing a slower memory.
+In order to make the best out of those methods, the number of messages identified as members of the set should be small
+compared to the non-member messages. 
+Further comparison in the paper between method~1 and method~2 demonstrates that the second method is more efficient.
+The paper end on an experimental result of method~2 applied on hyphenation.
+
+To conclude, the paper exposes a new approach to deal with the membership problem when the set of member messages
+does not fit in memory. This new approach relies on allowing a small number of false positive to achieve a smaller
+size for the set. This method is more efficient when a small fraction of the messages are members. Moreover, it does not prevent
+to use a slower memory to store the whole set of messages.
+
+
+
+\end{document}
+
+%vim: tw=50 ts=2:
+
