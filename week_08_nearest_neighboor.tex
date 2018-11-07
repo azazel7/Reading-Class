@@ -1,0 +1,30 @@
+\documentclass{article}
+\usepackage[margin=0.75cm]{geometry}
+\usepackage{listings}
+\usepackage{float}
+
+
+\title{Near-Optimal Hashing Algorithms for Approximate Nearest Neighbor in High Dimensions}
+\begin{document}
+\maketitle
+The paper present an algorithm based on hash function to imrpove the performance for solving the nearest neighbor problem.
+This problem state that given a point $q \in R^d$ where $R^d$ is a space of $d$ dimension and a set of points $P$, the nearest neighbor
+is the point in the dataset $P$ that is the closest to $q$.
+Algorithms exist to solve this problem when the number of dimension $d$ is low, but they do not adapt for large dimension.
+
+The algorithm relies on locality sensitive hash functions to find the best approximation of the nearest neighbor.
+First, All points in $P$ are projected into $R^t$, a space with $t$ dimensions where $t$ is relativly small compare to $d$.
+The hash function that project points from $R^d$ to $R^t$ make sure that points close to each other in $R^d$ remains close
+to each other into $R^t$.
+$R^t$ is then partitionned into a grid of voronoi spheres where each sphere are associated with a bucket of points.
+A point in $P$ is placed in a sphere bucket if its image in $R^t$ belong to that sphere.
+Then, to look for its potential closest neighbor, we have to look the bucket of this sphere and of the nearest spheres of that sphere.
+In other word, we downsize the problem.
+
+
+
+
+\end{document}
+
+%vim: tw=50 ts=2:
+
