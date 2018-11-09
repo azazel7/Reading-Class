@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage[margin=0.75cm]{geometry}
+\usepackage{listings}
+\usepackage{float}
+
+
+\title{The PageRank Citation Ranking: Bringing Order to the Web}
+\begin{document}
+\maketitle
+The paper present the \textit{PageRank} method in
+order to improve search engine of the early World
+Wide Web. This method not only relies on the text
+of each webpage, but rather on the metadata
+information about those pages.
+
+The paper define the forward link of a webpage $u$
+as hypertext link toward another webpage while the
+backward links are the links from other pages that
+point to the webpage $u$. The \textit{PageRank}
+method propose to use the backward links as an
+indicator of the importance of a page.
+A webpage $u$ can compute its current rank based
+on the ranks of the webpages that point to it,
+hence its backlinks. In the same vein, a webpage
+$u$ can be seen as distributing its ranks between all
+its forward links.
+To compute the webpage's ranks, the algorithm
+will initialize their value then refine
+it iteratively based on the backlink ranks of the webpage. 
+The initial values of the ranks have little
+impact on the result although a good
+initialization may speedup the process.
+The paper briefly discuss about issues implies by
+this method like the huge amount of data to
+compute, the proper way to ignore ranks of
+webpage without forward link or how to deal with
+closed loops in the graph.
+
+After that description of the \textit{PageRank},
+the paper explains how the search engine Google is
+build upon this metric. Given a keywords, the
+search engine will gather all webpage title
+containing these keywords then sorts the result by
+their \textit{PageRank} value.
+Results presented in the paper show better
+accuracy than other search engine.
+Then the paper propose a way of tweaking the
+\textit{PageRank} equation to personalized the
+query results. Such personalization can be made
+base on the whereabout of the user or by guessing
+its interest.
+
+%the current graph of the crawlable Web has
+
+
+
+
+\end{document}
+
+% vim: tw=50 ts=2:
+
+
